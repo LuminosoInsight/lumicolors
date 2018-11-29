@@ -60,6 +60,8 @@ export default function({ specs }) {
   var sat_array_adjusted = [];
   var hue_array_adjusted = [];
 
+  // console.log(hue_array);
+
   for (var index in lum_array) {
     const step = lum_array[index];
     lum_array_adjusted.push(
