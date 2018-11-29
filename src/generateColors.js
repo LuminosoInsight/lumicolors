@@ -1,6 +1,5 @@
 import chroma from "chroma-js";
 import * as Curves from "./curves.js";
-import bezier from "bezier-easing";
 
 function distribute(value, rangeA, rangeB) {
   const [fromLow, fromHigh] = Array.from(rangeA);
@@ -27,6 +26,21 @@ function distribute(value, rangeA, rangeB) {
 
   return result;
 }
+
+// Provide appropriate specs to generate a color palette
+// const paletteSpecs = {
+//   lum_curve: "linear",
+//   lum_start: 0,
+//   lum_end: 100,
+//   sat_curve: "linear",
+//   sat_start: 0,
+//   sat_end: 100,
+//   hue_curve: "linear",
+//   hue_start: 0,
+//   hue_end: 100,
+//   steps: 5,
+//   modifier: null
+// };
 
 export default function({ specs }) {
   function generateNumberOfSteps(curve, steps) {
@@ -88,8 +102,6 @@ export default function({ specs }) {
   var colorMap = [];
 
   for (var index in lum_array) {
-    var step = lum_array[index];
-
     var params = {
       hue: hue_array[index],
       saturation: sat_array[index],
@@ -103,9 +115,6 @@ export default function({ specs }) {
     var hex = chroma(
       chroma.hsv([params.hue, params.saturation, params.luminosity])
     );
-    var hexRGB = chroma(
-      chroma.hsv([params.hue, params.saturation, params.luminosity])
-    ).rgb();
 
     const contrastWhite = chroma.contrast(hex, "white").toFixed(2);
     const contrastBlack = chroma.contrast(hex, "black").toFixed(2);
