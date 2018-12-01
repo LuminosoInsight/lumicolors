@@ -1,4 +1,6 @@
 import chroma from "chroma-js";
+import _ from "lodash";
+
 import * as Curves from "./curves.js";
 
 function distribute(value, rangeA, rangeB) {
@@ -60,8 +62,6 @@ export default function({ specs }) {
   var sat_array_adjusted = [];
   var hue_array_adjusted = [];
 
-  // console.log(hue_array);
-
   for (var index in lum_array) {
     const step = lum_array[index];
     lum_array_adjusted.push(
@@ -101,13 +101,41 @@ export default function({ specs }) {
   sat_array = sat_array_adjusted;
   hue_array = hue_array_adjusted;
 
-  var colorMap = [];
+  // find out where in the generated color palette the source color should sit
+  let getTargetIndex = (sourceProperty, propertyArray) => {
+    // find the value from the array that is closest to the source color
+    var closestValue = _.first(
+      _.sortBy(propertyArray, step => {
+        return Math.abs(step - sourceProperty);
+      })
+    );
+    // Return the index of the closest matching value
+    return _.findIndex(propertyArray, o => {
+      return o === closestValue;
+    });
+  };
+  // Get the closest index for each HSV value and average them
+  var sourceHue = chroma(specs.sourceColor).hsv()[0];
+  var sourceSat = chroma(specs.sourceColor).hsv()[1];
+  var sourceLum = chroma(specs.sourceColor).hsv()[2];
+  var hueIndex = getTargetIndex(sourceHue, hue_array);
+  var satIndex = getTargetIndex(sourceSat, sat_array);
+  var lumIndex = getTargetIndex(sourceLum, lum_array);
+  var sourceColorIndex = Math.round((satIndex + lumIndex) / 2);
 
-  for (var index in lum_array) {
-    var params = {
-      hue: hue_array[index],
-      saturation: sat_array[index],
-      luminosity: lum_array[index]
+  var colorMap = _.map(hue_array, (hue, index) => {
+    // Get a value for each swatch based on the source color
+    const getShiftedProperty = (propertyArray, sourceProperty) => {
+      // Find out how much a property should shift relative to the source
+      let propertyShift =
+        propertyArray[index] - propertyArray[sourceColorIndex];
+      // Return the shifted value
+      return sourceProperty + propertyShift;
+    };
+    let params = {
+      hue: getShiftedProperty(hue_array, sourceHue),
+      saturation: getShiftedProperty(sat_array, sourceSat),
+      luminosity: getShiftedProperty(lum_array, sourceLum)
     };
 
     if (params.saturation > 1) {
@@ -128,7 +156,7 @@ export default function({ specs }) {
       displayColor = "black";
     }
 
-    var colorObj = {
+    return {
       hex: chroma(hex).hex(),
       hue: chroma(hex).hsv()[0],
       sat: chroma(hex).hsv()[1],
@@ -141,10 +169,10 @@ export default function({ specs }) {
       label: specs.modifier * index,
       contrastBlack: contrastBlack,
       contrastWhite: contrastWhite,
-      displayColor: displayColor
+      displayColor: displayColor,
+      sourceColorIndex
     };
-    colorMap.push(colorObj);
-  }
+  });
 
   return colorMap;
 }

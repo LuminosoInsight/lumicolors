@@ -8,11 +8,12 @@ import generateColors from "./generateColors";
 const Swatch = props => {
   const styles = {
     display: "inline-block",
-    height: "20px",
+    height: "36px",
     width: "200px",
     color: props.color.displayColor,
     padding: "0.5rem",
-    backgroundColor: props.color.hex
+    backgroundColor: props.color.hex,
+    boxSizing: "border-box"
   };
   const contrastBlackStyles = {
     color: "black"
@@ -20,12 +21,21 @@ const Swatch = props => {
   const contrastWhiteStyles = {
     color: "white"
   };
+
+  const SourceMarker = () => {
+    if (props.color.sourceColorIndex === props.index) {
+      return <span>*</span>;
+    } else {
+      return null;
+    }
+  };
   return (
     <li>
       <span style={styles}>
         {props.color.hex} |{" "}
         <span style={contrastBlackStyles}>{props.color.contrastBlack}</span> |{" "}
         <span style={contrastWhiteStyles}>{props.color.contrastWhite}</span>
+        <SourceMarker />
       </span>
     </li>
   );
@@ -48,25 +58,21 @@ class Colors extends Component {
       let hue = hsv[0];
       let sat = hsv[1];
       let lum = hsv[2];
-      console.log(hue);
-      console.log(sat);
-      console.log(lum);
 
-      // console.log(sourceColor);
-      // console.log(hue);
       return {
-        lum_curve: "easeInOutQuad",
-        lum_start: 98,
-        lum_end: 30,
-        sat_curve: "easeInOutQuad",
-        sat_start: 20,
-        sat_end: 200,
+        lum_curve: "linear",
+        lum_start: 90,
+        lum_end: 10,
+        sat_curve: "linear",
+        sat_start: 10,
+        sat_end: 90,
         sat_rate: 70,
         hue_curve: "linear",
-        hue_start: hue,
-        hue_end: hue,
+        hue_start: 10,
+        hue_end: 0,
         steps: 18,
-        modifier: null
+        modifier: null,
+        sourceColor
       };
     };
 
@@ -80,12 +86,13 @@ class Colors extends Component {
         {_.map(sourceColors, (sourceColor, index) => {
           // Generate a color palette from each source color
           let colorPalette = generateColors({ specs: getSpecs(sourceColor) });
-          console.log(colorPalette);
           return (
             <div key={index}>
-              <ul>
+              <ul style={{ borderRight: `10px solid ${sourceColor}` }}>
                 {_.map(colorPalette, (swatchColor, index) => {
-                  return <Swatch key={index} color={swatchColor} />;
+                  return (
+                    <Swatch key={index} index={index} color={swatchColor} />
+                  );
                 })}
               </ul>
             </div>
