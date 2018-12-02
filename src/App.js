@@ -9,19 +9,6 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <nav style={{ display: "none" }}>
-            <ul>
-              <li>
-                <Link to="/?color=red">Red</Link>
-              </li>
-              <li>
-                <Link to="/?color=blue">Blue</Link>
-              </li>
-              <li>
-                <Link to="/?color=green">Green</Link>
-              </li>
-            </ul>
-          </nav>
           <Route path="/" component={Colors} />
         </div>
       </Router>

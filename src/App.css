@@ -1,9 +1,27 @@
-.swatch-area {
+.lumicolors-tool {
+  display: flex;
+  flex-direction: row;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.sidebar {
+  padding: 1rem;
+  min-width: 200px;
+}
+
+.color-dot {
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  border-radius: 0.5rem;
+}
+
+.swatch-area {
+  overflow: auto;
 }
 
 .swatch-list {

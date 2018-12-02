@@ -59,19 +59,38 @@ class Colors extends Component {
     };
 
     return (
-      <div className="swatch-area" style={styles}>
-        {_.map(sourceColors, (sourceColor, index) => {
-          console.log(sourceColor, index);
-          // Generate a color palette from each source color
-          let colorPalette = generateColors(sourceColor);
-          return (
-            <div key={index} className="swatch-list">
-              {_.map(colorPalette, (swatchColor, index) => {
-                return <Swatch key={index} index={index} color={swatchColor} />;
-              })}
-            </div>
-          );
-        })}
+      <div className="lumicolors-tool">
+        <div className="sidebar">
+          {_.map(sourceColors, (sourceColor, index) => {
+            return (
+              <p key={index}>
+                <span
+                  className="color-dot"
+                  style={{
+                    background: sourceColor
+                  }}
+                />{" "}
+                {sourceColor}
+              </p>
+            );
+          })}
+        </div>
+        <div className="swatch-area" style={styles}>
+          {_.map(sourceColors, (sourceColor, index) => {
+            console.log(sourceColor, index);
+            // Generate a color palette from each source color
+            let colorPalette = generateColors(sourceColor);
+            return (
+              <div key={index} className="swatch-list">
+                {_.map(colorPalette, (swatchColor, index) => {
+                  return (
+                    <Swatch key={index} index={index} color={swatchColor} />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
