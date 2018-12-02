@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <nav>
+          <nav style={{ display: "none" }}>
             <ul>
               <li>
                 <Link to="/?color=red">Red</Link>

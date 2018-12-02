@@ -1,19 +1,13 @@
 import React, { Component } from "react";
 import queryString from "query-string";
 import _ from "lodash";
-import chroma from "chroma-js";
 
 import generateColors from "./generateColors";
 
 const Swatch = props => {
   const styles = {
-    display: "inline-block",
-    height: "36px",
-    width: "200px",
     color: props.color.displayColor,
-    padding: "0.5rem",
-    backgroundColor: props.color.hex,
-    boxSizing: "border-box"
+    backgroundColor: props.color.hex
   };
   const contrastBlackStyles = {
     color: "black"
@@ -30,14 +24,18 @@ const Swatch = props => {
     }
   };
   return (
-    <li>
-      <span style={styles}>
-        {props.color.hex} |{" "}
-        <span style={contrastBlackStyles}>{props.color.contrastBlack}</span> |{" "}
-        <span style={contrastWhiteStyles}>{props.color.contrastWhite}</span>
+    <div className="swatch" style={styles}>
+      <div className="swatch__info">
+        <span className="swatch__info-segment">{props.color.hex}</span>
+        <span className="swatch__info-segment" style={contrastBlackStyles}>
+          {props.color.contrastBlack}b
+        </span>
+        <span className="swatch__info-segment" style={contrastWhiteStyles}>
+          {props.color.contrastWhite}w
+        </span>
         <SourceMarker />
-      </span>
-    </li>
+      </div>
+    </div>
   );
 };
 
@@ -46,35 +44,14 @@ class Colors extends Component {
     // Get query params
     let params = queryString.parse(this.props.location.search);
     let sourceColors = [];
-    if (!Array.isArray(params.color)) {
-      sourceColors.push(params.color);
-    } else {
-      sourceColors = params.color;
+    if (params.color) {
+      if (!Array.isArray(params.color)) {
+        sourceColors.push(params.color);
+      } else {
+        sourceColors = params.color;
+      }
     }
-
-    const getSpecs = sourceColor => {
-      // Get hsl values from supplied color
-      let hsv = chroma(sourceColor).hsv();
-      let hue = hsv[0];
-      let sat = hsv[1];
-      let lum = hsv[2];
-
-      return {
-        lum_curve: "linear",
-        lum_start: 90,
-        lum_end: 10,
-        sat_curve: "linear",
-        sat_start: 10,
-        sat_end: 90,
-        sat_rate: 70,
-        hue_curve: "linear",
-        hue_start: 10,
-        hue_end: 0,
-        steps: 18,
-        modifier: null,
-        sourceColor
-      };
-    };
+    console.log(sourceColors);
 
     const styles = {
       display: "flex",
@@ -82,19 +59,16 @@ class Colors extends Component {
     };
 
     return (
-      <div style={styles}>
+      <div className="swatch-area" style={styles}>
         {_.map(sourceColors, (sourceColor, index) => {
+          console.log(sourceColor, index);
           // Generate a color palette from each source color
-          let colorPalette = generateColors({ specs: getSpecs(sourceColor) });
+          let colorPalette = generateColors(sourceColor);
           return (
-            <div key={index}>
-              <ul style={{ borderRight: `10px solid ${sourceColor}` }}>
-                {_.map(colorPalette, (swatchColor, index) => {
-                  return (
-                    <Swatch key={index} index={index} color={swatchColor} />
-                  );
-                })}
-              </ul>
+            <div key={index} className="swatch-list">
+              {_.map(colorPalette, (swatchColor, index) => {
+                return <Swatch key={index} index={index} color={swatchColor} />;
+              })}
             </div>
           );
         })}
