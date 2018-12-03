@@ -39,7 +39,7 @@ export default function(sourceColor) {
   // Build a wider set of colors to choose from
   let expandedColors = [];
   let hueIncrement = 0.2; // rate of hue change
-  let satIncrement = 0.015; // rate of saturation change
+  let satIncrement = 0.03; // rate of saturation change
   let lumIncrement = 0.015; // rate of luminosity change
   _.times(steps * 10, index => {
     let sourceColorHSV = chroma(sourceColor).hsv();

@@ -51,16 +51,32 @@ class Colors extends Component {
         sourceColors = params.color;
       }
     }
-    console.log(sourceColors);
+
+    // Adding, removing and updating colors
+    let addColor = e => {
+      e.preventDefault();
+      console.log(e.target.newColor.value);
+      params.color = _.concat(
+        e.target.newColor.value,
+        _.cloneDeep(params.color)
+      );
+      let newQueryString = queryString.stringify(params);
+      e.target.value = null;
+      this.props.history.push(`/?${newQueryString}`);
+      console.log(newQueryString);
+    };
 
     const styles = {
       display: "flex",
       flexDirection: "row"
     };
 
-    return (
-      <div className="lumicolors-tool">
+    const Sidebar = props => {
+      return (
         <div className="sidebar">
+          <form onSubmit={addColor}>
+            <input type="text" name="newColor" />
+          </form>
           {_.map(sourceColors, (sourceColor, index) => {
             return (
               <p key={index}>
@@ -75,6 +91,12 @@ class Colors extends Component {
             );
           })}
         </div>
+      );
+    };
+
+    return (
+      <div className="lumicolors-tool">
+        <Sidebar sourceColors={sourceColors} />
         <div className="swatch-area" style={styles}>
           {_.map(sourceColors, (sourceColor, index) => {
             console.log(sourceColor, index);
