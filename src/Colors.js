@@ -40,6 +40,12 @@ const Swatch = props => {
 };
 
 class Colors extends Component {
+  constructor() {
+    this.state = {
+      pickerOpen: false
+    };
+  }
+
   render() {
     // Get query params
     let params = queryString.parse(this.props.location.search);
@@ -55,7 +61,6 @@ class Colors extends Component {
     // Adding, removing and updating colors
     let addColor = e => {
       e.preventDefault();
-      console.log(e.target.newColor.value);
       params.color = _.concat(
         e.target.newColor.value,
         _.cloneDeep(params.color)
@@ -63,7 +68,14 @@ class Colors extends Component {
       let newQueryString = queryString.stringify(params);
       e.target.value = null;
       this.props.history.push(`/?${newQueryString}`);
-      console.log(newQueryString);
+    };
+
+    let openColorPicker = () => {
+      this.setState({ pickerOpen: true });
+    };
+
+    let closeColorPicker = () => {
+      this.setState({ pickerOpen: false });
     };
 
     const styles = {
@@ -77,6 +89,7 @@ class Colors extends Component {
           <form onSubmit={addColor}>
             <input type="text" name="newColor" />
           </form>
+          <button onClick={openColorPicker} onBlur={closeColorPicker} />
           {_.map(sourceColors, (sourceColor, index) => {
             return (
               <p key={index}>

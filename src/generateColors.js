@@ -49,12 +49,10 @@ export default function(sourceColor) {
     let darkerHue = sourceColorHSV[0] - hueIncrement * index;
     let darkerSat = confine(sourceColorHSV[1] + satIncrement * index);
     let darkerLum = confine(sourceColorHSV[2] - lumIncrement * index);
-    let darkerColor = chroma(
+    let lighterColor = chroma(
       chroma.hsv(lighterHue, lighterSat, lighterLum)
     ).hex();
-    let lighterColor = chroma(
-      chroma.hsv(darkerHue, darkerSat, darkerLum)
-    ).hex();
+    let darkerColor = chroma(chroma.hsv(darkerHue, darkerSat, darkerLum)).hex();
     expandedColors.push(darkerColor, lighterColor);
   });
 
