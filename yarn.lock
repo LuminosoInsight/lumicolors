@@ -6966,6 +6966,10 @@ recursive-readdir@2.2.2:
   dependencies:
     minimatch "3.0.4"
 
+redux-zero@^4.15.1:
+  version "4.15.1"
+  resolved "https://registry.yarnpkg.com/redux-zero/-/redux-zero-4.15.1.tgz#0a69c88863afe579d003cb5a00d282c1de0c175d"
+
 regenerate-unicode-properties@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-7.0.0.tgz#107405afcc4a190ec5ed450ecaa00ed0cafa7a4c"

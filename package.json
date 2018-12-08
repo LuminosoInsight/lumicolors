@@ -12,7 +12,8 @@
     "react-dom": "^16.6.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
-    "reactcss": "^1.2.3"
+    "reactcss": "^1.2.3",
+    "redux-zero": "^4.15.1"
   },
   "scripts": {
     "start": "react-scripts start",

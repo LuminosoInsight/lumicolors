@@ -1,24 +1,44 @@
 import React, { Component } from "react";
 import _ from "lodash";
+import { connect } from "redux-zero/react";
+import queryString from "query-string";
 
+import actions from "./actions";
 import ColorPicker from "./ColorPicker";
 
 class Sidebar extends Component {
+  constructor(props) {
+    super(props);
+    this.updateColor = this.updateColor.bind(this);
+  }
+
+  updateColor(color) {
+    let mergedColors = {
+      ..._.keyBy([color], "id"),
+      ...this.props.colors
+    };
+    let newQueryColors = _.map(mergedColors, color => {
+      return `${color.hex}/${color.id}`;
+    });
+    this.props.history.push(queryString.stringify({ colors: newQueryColors }));
+  }
+
   render() {
     return (
       <div className="sidebar">
-        {_.map(this.props.sourceColors, (sourceColor, index) => {
+        {_.map(this.props.colors, (color, index) => {
           return (
-            <p key={index}>
-              <ColorPicker color={sourceColor} />
+            <div key={index}>
+              <ColorPicker color={color} updateColor={this.updateColor} />
               <span
                 className="color-dot"
                 style={{
-                  background: sourceColor
+                  background: color.hex
                 }}
+                onClick={() => this.updateColor({ hex: "#ff0000", id: index })}
               />{" "}
-              {sourceColor}
-            </p>
+              {color.hex}
+            </div>
           );
         })}
       </div>
@@ -26,4 +46,9 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar;
+const mapToProps = ({ colors }) => ({ colors });
+
+export default connect(
+  mapToProps,
+  actions
+)(Sidebar);
