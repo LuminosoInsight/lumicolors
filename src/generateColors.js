@@ -38,16 +38,16 @@ export default function(sourceColor) {
 
   // Build a wider set of colors to choose from
   let expandedColors = [];
-  let hueIncrement = 0.2; // rate of hue change
-  let satIncrement = 0.03; // rate of saturation change
+  let hueIncrement = 0.15; // rate of hue change
+  let satIncrement = 0.008; // rate of saturation change
   let lumIncrement = 0.015; // rate of luminosity change
   _.times(steps * 10, index => {
     let sourceColorHSV = chroma(sourceColor).hsv();
     let lighterHue = sourceColorHSV[0] + hueIncrement * index;
     let lighterSat = confine(sourceColorHSV[1] - satIncrement * index);
     let lighterLum = confine(sourceColorHSV[2] + lumIncrement * index);
-    let darkerHue = sourceColorHSV[0] - hueIncrement * index;
-    let darkerSat = confine(sourceColorHSV[1] + satIncrement * index);
+    let darkerHue = sourceColorHSV[0] - hueIncrement * 2 * index;
+    let darkerSat = confine(sourceColorHSV[1] + satIncrement * 4 * index);
     let darkerLum = confine(sourceColorHSV[2] - lumIncrement * index);
     let lighterColor = chroma(
       chroma.hsv(lighterHue, lighterSat, lighterLum)
@@ -60,7 +60,7 @@ export default function(sourceColor) {
   let lightestColor = _.first(
     _.sortBy(expandedColors, color => {
       let colorContrast = chroma.contrast(color, "black").toFixed(2);
-      return Math.abs(colorContrast - contrastRange[1]);
+      return Math.abs(colorContrast - 19);
     })
   );
 
@@ -68,7 +68,7 @@ export default function(sourceColor) {
   let darkestColor = _.first(
     _.sortBy(expandedColors, color => {
       let colorContrast = chroma.contrast(color, "white").toFixed(2);
-      return Math.abs(colorContrast - contrastRange[1]);
+      return Math.abs(colorContrast - 18);
     })
   );
 

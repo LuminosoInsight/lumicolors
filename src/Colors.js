@@ -3,6 +3,7 @@ import queryString from "query-string";
 import _ from "lodash";
 
 import generateColors from "./generateColors";
+import ColorPicker from "./ColorPicker";
 
 const Swatch = props => {
   const styles = {
@@ -40,23 +41,31 @@ const Swatch = props => {
 };
 
 class Colors extends Component {
-  constructor() {
+  constructor(props) {
+    super(props);
     this.state = {
-      pickerOpen: false
+      colors: []
     };
   }
 
   render() {
     // Get query params
     let params = queryString.parse(this.props.location.search);
-    let sourceColors = [];
+    let colorQueries = [];
     if (params.color) {
       if (!Array.isArray(params.color)) {
-        sourceColors.push(params.color);
+        colorQueries.push(params.color);
       } else {
-        sourceColors = params.color;
+        colorQueries = params.color;
       }
     }
+    let sourceColors = _.map(colorQueries, query => {
+      let splitQuery = query.split("/");
+      return {
+        color: splitQuery[0],
+        id: splitQuery[1]
+      };
+    });
 
     // Adding, removing and updating colors
     let addColor = e => {
@@ -70,14 +79,6 @@ class Colors extends Component {
       this.props.history.push(`/?${newQueryString}`);
     };
 
-    let openColorPicker = () => {
-      this.setState({ pickerOpen: true });
-    };
-
-    let closeColorPicker = () => {
-      this.setState({ pickerOpen: false });
-    };
-
     const styles = {
       display: "flex",
       flexDirection: "row"
@@ -86,21 +87,18 @@ class Colors extends Component {
     const Sidebar = props => {
       return (
         <div className="sidebar">
-          <form onSubmit={addColor}>
-            <input type="text" name="newColor" />
-          </form>
-          <button onClick={openColorPicker} onBlur={closeColorPicker} />
           {_.map(sourceColors, (sourceColor, index) => {
             return (
-              <p key={index}>
+              <div key={index}>
+                <ColorPicker color={sourceColor.color} />
                 <span
                   className="color-dot"
                   style={{
-                    background: sourceColor
+                    background: sourceColor.color
                   }}
                 />{" "}
-                {sourceColor}
-              </p>
+                {sourceColor.color}
+              </div>
             );
           })}
         </div>
@@ -112,9 +110,9 @@ class Colors extends Component {
         <Sidebar sourceColors={sourceColors} />
         <div className="swatch-area" style={styles}>
           {_.map(sourceColors, (sourceColor, index) => {
-            console.log(sourceColor, index);
+            console.log(sourceColor.color, index);
             // Generate a color palette from each source color
-            let colorPalette = generateColors(sourceColor);
+            let colorPalette = generateColors(sourceColor.color);
             return (
               <div key={index} className="swatch-list">
                 {_.map(colorPalette, (swatchColor, index) => {

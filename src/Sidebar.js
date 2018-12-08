@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import _ from "lodash";
 
+import ColorPicker from "./ColorPicker";
+
 class Sidebar extends Component {
   render() {
     return (
@@ -8,6 +10,7 @@ class Sidebar extends Component {
         {_.map(this.props.sourceColors, (sourceColor, index) => {
           return (
             <p key={index}>
+              <ColorPicker color={sourceColor} />
               <span
                 className="color-dot"
                 style={{
