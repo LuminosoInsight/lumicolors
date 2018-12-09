@@ -64,9 +64,12 @@ class Colors extends Component {
 
   addOrUpdateColor(colorObj) {
     // If a color was supplied, use it. Otherwise fall back to new color
+    console.log(this.props.colors);
+    let newColorId = this.props.colors.length;
+    console.log(newColorId);
     let newColorObj = colorObj.hex
       ? colorObj
-      : { hex: "#ffffff", id: this.props.colors.length };
+      : { hex: "aqua", id: Object.keys(this.props.colors).length };
 
     // Merge the new color and add it to the store and the query params
     let mergedColors = getMergedColors(newColorObj, this.props.colors);
@@ -88,6 +91,7 @@ class Colors extends Component {
   }
 
   render() {
+    console.log(this.props.colors);
     return (
       <div className="lumicolors-tool">
         <Sidebar
