@@ -1,43 +1,37 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { connect } from "redux-zero/react";
-import queryString from "query-string";
 
-import actions from "./actions";
 import ColorPicker from "./ColorPicker";
 
 class Sidebar extends Component {
-  constructor(props) {
-    super(props);
-    this.updateColor = this.updateColor.bind(this);
-  }
-
-  updateColor(color) {
-    let mergedColors = {
-      ..._.keyBy([color], "id"),
-      ...this.props.colors
-    };
-    let newQueryColors = _.map(mergedColors, color => {
-      return `${color.hex}/${color.id}`;
-    });
-    this.props.history.push(queryString.stringify({ colors: newQueryColors }));
-  }
-
   render() {
     return (
       <div className="sidebar">
-        {_.map(this.props.colors, (color, index) => {
+        <button onClick={this.props.addOrUpdateColor}>Add column</button>
+        {_.map(_.orderBy(this.props.colors, "id", "desc"), (color, index) => {
           return (
             <div key={index}>
-              <ColorPicker color={color} updateColor={this.updateColor} />
+              <ColorPicker
+                color={color}
+                addOrUpdateColor={this.props.addOrUpdateColor}
+              />
               <span
                 className="color-dot"
                 style={{
                   background: color.hex
                 }}
-                onClick={() => this.updateColor({ hex: "#ff0000", id: index })}
+                onClick={() =>
+                  this.props.addOrUpdateColor({ hex: "#ff0000", id: index })
+                }
               />{" "}
               {color.hex}
+              <button
+                onClick={() => {
+                  this.props.removeColumn(color);
+                }}
+              >
+                Remove
+              </button>
             </div>
           );
         })}
@@ -46,9 +40,4 @@ class Sidebar extends Component {
   }
 }
 
-const mapToProps = ({ colors }) => ({ colors });
-
-export default connect(
-  mapToProps,
-  actions
-)(Sidebar);
+export default Sidebar;

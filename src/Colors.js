@@ -7,67 +7,95 @@ import actions from "./actions";
 import Palettes from "./Palettes";
 import Sidebar from "./Sidebar";
 
-class Colors extends Component {
-  componentDidMount() {
-    // Get query params
-    let params = queryString.parse(this.props.location.search);
-    let colorQueries = [];
-    if (params.color) {
-      if (!Array.isArray(params.color)) {
-        colorQueries.push(params.color);
-      } else {
-        colorQueries = params.color;
-      }
+// Get colors from query params when this component mounts
+const getColorParams = props => {
+  // Get query params
+  let params = queryString.parse(props.location.search);
+  let colorQueries = [];
+  if (params.color) {
+    if (!Array.isArray(params.color)) {
+      colorQueries.push(params.color);
+    } else {
+      colorQueries = params.color;
     }
-    let queryColors = _.map(colorQueries, query => {
-      let splitQuery = query.split("/");
-      return {
-        hex: splitQuery[0],
-        id: splitQuery[1]
-      };
-    });
+  }
+  // Return an array of color objects
+  return _.map(colorQueries, (color, index) => {
+    return {
+      hex: color,
+      id: index
+    };
+  });
+};
 
-    this.props.updateColors({
-      ...this.props.colors,
-      ..._.keyBy(queryColors, "id")
-    });
+// Merge any supplied color object {hex, id}, return a list set ordered by 'id'
+const getMergedColors = (colorObj, colors) => {
+  let mergedColors = {
+    ...colors,
+    ..._.keyBy([colorObj], "id")
+  };
+  let colorsArray = _.map(_.orderBy(mergedColors, "id"), color => {
+    return color.hex;
+  });
+  return colorsArray;
+};
+
+// Build a new query string
+const getQueryString = colors => {
+  return queryString.stringify({
+    color: _.map(_.orderBy(colors, "id"), color => {
+      return color;
+    })
+  });
+};
+
+class Colors extends Component {
+  constructor(props) {
+    super(props);
+    this.addOrUpdateColor = this.addOrUpdateColor.bind(this);
+    this.removeColumn = this.removeColumn.bind(this);
+  }
+
+  componentDidMount() {
+    // When this component mounts, get colors from the query params
+    let queryColors = getColorParams(this.props);
+    this.props.replaceColors(_.keyBy(queryColors, "id"));
+  }
+
+  addOrUpdateColor(colorObj) {
+    // If a color was supplied, use it. Otherwise fall back to new color
+    let newColorObj = colorObj.hex
+      ? colorObj
+      : { hex: "#ffffff", id: this.props.colors.length };
+
+    // Merge the new color and add it to the store and the query params
+    let mergedColors = getMergedColors(newColorObj, this.props.colors);
+    this.props.updateColor(newColorObj);
+    this.props.history.push(`?${getQueryString(mergedColors)}`);
+  }
+
+  removeColumn(color) {
+    let culledColors = _.map(
+      _.filter(this.props.colors, existingColor => {
+        return existingColor.id !== color.id;
+      }),
+      color => {
+        return color.hex;
+      }
+    );
+    this.props.removeColor(color);
+    this.props.history.push(`?${getQueryString(culledColors)}`);
   }
 
   render() {
-    // Get query params
-    let params = queryString.parse(this.props.location.search);
-    let colorQueries = [];
-    if (params.color) {
-      if (!Array.isArray(params.color)) {
-        colorQueries.push(params.color);
-      } else {
-        colorQueries = params.color;
-      }
-    }
-    let sourceColors = _.map(colorQueries, query => {
-      let splitQuery = query.split("/");
-      return {
-        color: splitQuery[0],
-        id: splitQuery[1]
-      };
-    });
-
-    // Adding, removing and updating colors
-    let addColor = e => {
-      e.preventDefault();
-      params.color = _.concat(
-        e.target.newColor.value,
-        _.cloneDeep(params.color)
-      );
-      let newQueryString = queryString.stringify(params);
-      e.target.value = null;
-      this.props.history.push(`/?${newQueryString}`);
-    };
-
     return (
       <div className="lumicolors-tool">
-        <Sidebar />
-        <Palettes />
+        <Sidebar
+          addOrUpdateColor={this.addOrUpdateColor}
+          colors={this.props.colors}
+          removeColumn={this.removeColumn}
+        />
+        <Palettes colors={this.props.colors} />
       </div>
     );
   }

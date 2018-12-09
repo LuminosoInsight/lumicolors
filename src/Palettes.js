@@ -1,35 +1,32 @@
-import React from "react";
+import React, { Component } from "react";
 import _ from "lodash";
-import { connect } from "redux-zero/react";
 
-import actions from "./actions";
 import generateColors from "./generateColors";
 
-const mapToProps = ({ colors }) => ({ colors });
+class Palettes extends Component {
+  render() {
+    return (
+      <div
+        className="swatch-area"
+        style={{ display: "flex", flexDirection: "row" }}
+      >
+        {_.map(_.orderBy(this.props.colors, "id", "desc"), (color, index) => {
+          // Generate a color palette from each source color
+          let colorPalette = generateColors(color.hex);
+          return (
+            <div key={index} className="swatch-list">
+              {_.map(colorPalette, (swatchColor, index) => {
+                return <Swatch key={index} index={index} color={swatchColor} />;
+              })}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+}
 
-export default connect(
-  mapToProps,
-  actions
-)(({ colors, addColor, replaceColors }) => (
-  <div
-    className="swatch-area"
-    style={{ display: "flex", flexDirection: "row" }}
-  >
-    {_.map(colors, (color, index) => {
-      console.log(colors);
-      console.log(color.hex, index);
-      // Generate a color palette from each source color
-      let colorPalette = generateColors(color.hex);
-      return (
-        <div key={index} className="swatch-list">
-          {_.map(colorPalette, (swatchColor, index) => {
-            return <Swatch key={index} index={index} color={swatchColor} />;
-          })}
-        </div>
-      );
-    })}
-  </div>
-));
+export default Palettes;
 
 const Swatch = props => {
   const styles = {

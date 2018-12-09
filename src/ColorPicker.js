@@ -7,12 +7,7 @@ class ColorPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayColorPicker: false,
-      color: {
-        r: chroma(props.color.hex).rgb()[0],
-        g: chroma(props.color.hex).rgb()[1],
-        b: chroma(props.color.hex).rgb()[2]
-      }
+      displayColorPicker: false
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -28,18 +23,20 @@ class ColorPicker extends React.Component {
   }
 
   handleChange(color) {
-    this.setState({ color: color.rgb });
+    this.props.addOrUpdateColor({ hex: color.hex, id: this.props.color.id });
+    this.setState({ displayColorPicker: false });
   }
 
   render() {
+    const color = chroma(this.props.color.hex);
     const styles = reactCSS({
       default: {
         color: {
           width: "36px",
           height: "14px",
           borderRadius: "2px",
-          background: `rgb(${this.state.color.r}, ${this.state.color.g}, ${
-            this.state.color.b
+          background: `rgb(${color.rgb()[0]}, ${color.rgb()[1]}, ${
+            color.rgb()[2]
           })`
         },
         swatch: {
