@@ -80,8 +80,15 @@ class Colors extends Component {
     let newColorId = this.props.colors.length;
     console.log(newColorId);
     let newColorObj = colorObj.hex
-      ? colorObj
-      : { hex: "#666666", id: Object.keys(this.props.colors).length };
+      ? {
+          ...colorObj,
+          swatches: generateColors(colorObj.hex)
+        }
+      : {
+          hex: "#666666",
+          id: Object.keys(this.props.colors).length,
+          swatches: generateColors("#666666")
+        };
 
     // Merge the new color and add it to the store and the query params
     let mergedColors = getMergedColors(newColorObj, this.props.colors);
