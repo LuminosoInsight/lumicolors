@@ -3,6 +3,7 @@ import queryString from "query-string";
 import _ from "lodash";
 import { connect } from "redux-zero/react";
 
+import generateColors from "./generateColors";
 import actions from "./actions";
 import Palettes from "./Palettes";
 import Sidebar from "./Sidebar";
@@ -59,7 +60,18 @@ class Colors extends Component {
   componentDidMount() {
     // When this component mounts, get colors from the query params
     let queryColors = getColorParams(this.props);
-    this.props.replaceColors(_.keyBy(queryColors, "id"));
+    let colorPalettes = _.keyBy(
+      _.map(queryColors, color => {
+        let swatches = generateColors(color.hex);
+        return {
+          ...color,
+          sourceColorIndex: swatches[0].sourceColorIndex,
+          swatches
+        };
+      }),
+      "id"
+    );
+    this.props.replaceColors(colorPalettes);
   }
 
   addOrUpdateColor(colorObj) {
@@ -69,7 +81,7 @@ class Colors extends Component {
     console.log(newColorId);
     let newColorObj = colorObj.hex
       ? colorObj
-      : { hex: "aqua", id: Object.keys(this.props.colors).length };
+      : { hex: "#666666", id: Object.keys(this.props.colors).length };
 
     // Merge the new color and add it to the store and the query params
     let mergedColors = getMergedColors(newColorObj, this.props.colors);
@@ -91,7 +103,6 @@ class Colors extends Component {
   }
 
   render() {
-    console.log(this.props.colors);
     return (
       <div className="lumicolors-tool">
         <Sidebar

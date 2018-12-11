@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import _ from "lodash";
 
 import ColorPicker from "./ColorPicker";
@@ -39,5 +40,11 @@ class Sidebar extends Component {
     );
   }
 }
+
+Sidebar.propTypes = {
+  addOrUpdateColor: PropTypes.func.isRequired,
+  colors: PropTypes.object.isRequired,
+  removeColumn: PropTypes.func.isRequired
+};
 
 export default Sidebar;

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import _ from "lodash";
-
-import generateColors from "./generateColors";
 
 class Palettes extends Component {
   render() {
@@ -12,10 +11,9 @@ class Palettes extends Component {
       >
         {_.map(_.orderBy(this.props.colors, "id", "desc"), (color, index) => {
           // Generate a color palette from each source color
-          let colorPalette = generateColors(color.hex);
           return (
             <div key={index} className="swatch-list">
-              {_.map(colorPalette, (swatchColor, index) => {
+              {_.map(color.swatches, (swatchColor, index) => {
                 return <Swatch key={index} index={index} color={swatchColor} />;
               })}
             </div>
@@ -25,6 +23,10 @@ class Palettes extends Component {
     );
   }
 }
+
+Palettes.propTypes = {
+  colors: PropTypes.object.isRequired
+};
 
 export default Palettes;
 
