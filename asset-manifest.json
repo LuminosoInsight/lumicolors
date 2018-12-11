@@ -1,13 +1,13 @@
 {
   "main.css": "/lumicolors/static/css/main.31575139.chunk.css",
-  "main.js": "/lumicolors/static/js/main.2f94f0f0.chunk.js",
-  "main.js.map": "/lumicolors/static/js/main.2f94f0f0.chunk.js.map",
-  "static/js/1.f1b5e702.chunk.js": "/lumicolors/static/js/1.f1b5e702.chunk.js",
-  "static/js/1.f1b5e702.chunk.js.map": "/lumicolors/static/js/1.f1b5e702.chunk.js.map",
+  "main.js": "/lumicolors/static/js/main.171f01bd.chunk.js",
+  "main.js.map": "/lumicolors/static/js/main.171f01bd.chunk.js.map",
+  "static/js/1.0bb2f404.chunk.js": "/lumicolors/static/js/1.0bb2f404.chunk.js",
+  "static/js/1.0bb2f404.chunk.js.map": "/lumicolors/static/js/1.0bb2f404.chunk.js.map",
   "runtime~main.js": "/lumicolors/static/js/runtime~main.dd846453.js",
   "runtime~main.js.map": "/lumicolors/static/js/runtime~main.dd846453.js.map",
   "static/css/main.31575139.chunk.css.map": "/lumicolors/static/css/main.31575139.chunk.css.map",
   "index.html": "/lumicolors/index.html",
-  "precache-manifest.0200db3d276569d88c0404262c1a0112.js": "/lumicolors/precache-manifest.0200db3d276569d88c0404262c1a0112.js",
+  "precache-manifest.c1c0807697ea7e490b5c1876802a3f15.js": "/lumicolors/precache-manifest.c1c0807697ea7e490b5c1876802a3f15.js",
   "service-worker.js": "/lumicolors/service-worker.js"
 }
