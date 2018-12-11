@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 
 import ColorPicker from "./ColorPicker";
+import ColorFinder from "./ColorFinder";
 
 class Sidebar extends Component {
   render() {
@@ -36,6 +37,9 @@ class Sidebar extends Component {
             </div>
           );
         })}
+        <div>
+          <ColorFinder colors={this.props.colors} />
+        </div>
       </div>
     );
   }
