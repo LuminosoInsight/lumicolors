@@ -75,30 +75,34 @@ class ColorFinder extends Component {
           <button type="submit">Find a color</button>
         </form>
         {this.state.result && (
-          <p style={{ lineHeight: 1.5 }}>
-            The closest color to{" "}
-            <span
-              style={{
-                background: this.state.comparison.hex,
-                color: this.state.comparison.displayColor,
-                padding: "0 .5rem",
-                borderRadius: ".5rem"
-              }}
-            >
-              {this.state.comparison.hex}
-            </span>{" "}
-            is{" "}
-            <span
-              style={{
-                background: this.state.result.hex,
-                color: this.state.result.displayColor,
-                padding: "0 .5rem",
-                borderRadius: ".5rem"
-              }}
-            >
-              {this.state.result.hex}
-            </span>{" "}
-          </p>
+          <div>
+            <p style={{ lineHeight: 1.5 }}>You searched for: </p>
+            <p>
+              <span
+                style={{
+                  background: this.state.comparison.hex,
+                  color: this.state.comparison.displayColor,
+                  padding: "0 .5rem",
+                  borderRadius: ".5rem"
+                }}
+              >
+                {this.state.comparison.hex}
+              </span>
+            </p>
+            <p>The closest color is:</p>
+            <p>
+              <span
+                style={{
+                  background: this.state.result.hex,
+                  color: this.state.result.displayColor,
+                  padding: "0 .5rem",
+                  borderRadius: ".5rem"
+                }}
+              >
+                {this.state.result.hex}
+              </span>{" "}
+            </p>
+          </div>
         )}
       </div>
     );
