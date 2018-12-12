@@ -1,5 +1,5 @@
 import React from "react";
-import { SketchPicker } from "react-color";
+import { CompactPicker } from "react-color";
 import reactCSS from "reactcss";
 import chroma from "chroma-js";
 
@@ -69,8 +69,8 @@ class ColorPicker extends React.Component {
         {this.state.displayColorPicker ? (
           <div style={styles.popover}>
             <div style={styles.cover} onClick={this.handleClose} />
-            <SketchPicker
-              color={this.state.color}
+            <CompactPicker
+              color={this.props.color.hex}
               onChange={this.handleChange}
             />
           </div>
