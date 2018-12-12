@@ -79,12 +79,13 @@ export default function(sourceColor) {
       sourceColor,
       chroma(darkestColor).hex()
     ])
-    .domain([0, sourceColorIndex / steps, 1])
+    .domain([0, sourceColorIndex / (steps - 1), 1])
     .colors(steps);
+
+  console.log(colorGradient);
 
   // Assemble our final swatch list for this palette
   let swatchList = _.map(colorGradient, (color, index) => {
-    if (index === sourceColorIndex) color = sourceColor;
     const contrastWhite = chroma.contrast(color, "white").toFixed(2);
     const contrastBlack = chroma.contrast(color, "black").toFixed(2);
     var displayColor = "";
