@@ -14,6 +14,17 @@ class Sidebar extends Component {
       padding: ".25rem 0"
     };
 
+    let getSass = () => {
+      let sassCode = "";
+      _.each(this.props.colors, color => {
+        sassCode += `// Shades of ${color.name}\n`;
+        _.each(color.swatches, swatch => {
+          sassCode += `$${swatch.name}: ${swatch.hex};\n`;
+        });
+      });
+      return sassCode;
+    };
+
     return (
       <div className="sidebar">
         <button onClick={this.props.addOrUpdateColor}>Add column</button>
@@ -39,6 +50,14 @@ class Sidebar extends Component {
         })}
         <div>
           <ColorFinder colors={this.props.colors} />
+        </div>
+        <div>
+          <p>Sass variables</p>
+          <textarea
+            style={{ width: "100%", height: "200px" }}
+            disabled
+            value={getSass()}
+          />
         </div>
       </div>
     );

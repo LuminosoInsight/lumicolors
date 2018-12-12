@@ -2,6 +2,7 @@ import chroma from "chroma-js";
 import _ from "lodash";
 
 import * as Curves from "./curves.js";
+import crayolaColors from "./crayolaColors";
 
 export default function(sourceColor) {
   // Bail out if there isn't really a source color provided
@@ -82,9 +83,7 @@ export default function(sourceColor) {
     .domain([0, sourceColorIndex / (steps - 1), 1])
     .colors(steps);
 
-  console.log(colorGradient);
-
-  // Assemble our final swatch list for this palette
+  // Assemble the swatch list for this palette
   let swatchList = _.map(colorGradient, (color, index) => {
     const contrastWhite = chroma.contrast(color, "white").toFixed(2);
     const contrastBlack = chroma.contrast(color, "black").toFixed(2);
@@ -110,5 +109,34 @@ export default function(sourceColor) {
     };
   });
 
-  return swatchList;
+  // Pick a name for this set of swatches and apply it to each swatch
+  let swatchName = _.first(
+    _.orderBy(
+      _.map(crayolaColors, color => {
+        return {
+          ...color,
+          distance: chroma.distance(color.hex, sourceColor)
+        };
+      }),
+      "distance",
+      "asc"
+    )
+  ).name;
+
+  // Make the swatch name lowercase and replace spaces with hyphens
+  let swatchNameFormatted = swatchName
+    .trim()
+    .replace(/\s/g, "-")
+    .toLowerCase();
+
+  // Add swatch names to each swatch in the palette
+  _.each(swatchList, (swatch, i) => {
+    swatchList[i].name = `${swatchNameFormatted}-${i}`;
+  });
+
+  return {
+    name: swatchName,
+    swatches: swatchList,
+    sourceColorIndex: swatchList[0].sourceColorIndex
+  };
 }

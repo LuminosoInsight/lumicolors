@@ -62,11 +62,10 @@ class Colors extends Component {
     let queryColors = getColorParams(this.props);
     let colorPalettes = _.keyBy(
       _.map(queryColors, color => {
-        let swatches = generateColors(color.hex);
+        let swatchInfo = generateColors(color.hex);
         return {
           ...color,
-          sourceColorIndex: swatches[0].sourceColorIndex,
-          swatches
+          ...swatchInfo
         };
       }),
       "id"
@@ -79,10 +78,11 @@ class Colors extends Component {
     console.log(this.props.colors);
     let newColorId = this.props.colors.length;
     console.log(newColorId);
+    let swatchInfo = generateColors(colorObj.hex);
     let newColorObj = colorObj.hex
       ? {
           ...colorObj,
-          swatches: generateColors(colorObj.hex)
+          ...swatchInfo
         }
       : {
           hex: "#666666",

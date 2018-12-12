@@ -99,7 +99,7 @@ class ColorFinder extends Component {
                   borderRadius: ".5rem"
                 }}
               >
-                {this.state.result.hex}
+                {`${this.state.result.hex} - ${this.state.result.name}`}
               </span>{" "}
             </p>
           </div>
