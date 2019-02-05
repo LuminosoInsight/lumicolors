@@ -4,6 +4,7 @@ import _ from "lodash";
 
 import ColorPicker from "./ColorPicker";
 import ColorFinder from "./ColorFinder";
+import CodeOutput from "./CodeOutput";
 
 class Sidebar extends Component {
   render() {
@@ -12,17 +13,6 @@ class Sidebar extends Component {
       flexDirection: "row",
       alignItems: "center",
       padding: ".25rem 0"
-    };
-
-    let getSass = () => {
-      let sassCode = "";
-      _.each(this.props.colors, color => {
-        sassCode += `// Shades of ${color.name}\n`;
-        _.each(color.swatches, swatch => {
-          sassCode += `$${swatch.name}: ${swatch.hex};\n`;
-        });
-      });
-      return sassCode;
     };
 
     return (
@@ -48,16 +38,26 @@ class Sidebar extends Component {
             </div>
           );
         })}
+        <hr />
         <div>
+          <p>
+            Supply a color code (Valid CSS value)and get in return the name and
+            hex of a valid color from this palette
+          </p>
           <ColorFinder colors={this.props.colors} />
         </div>
+        <hr />
         <div>
-          <p>Sass variables</p>
-          <textarea
-            style={{ width: "100%", height: "200px" }}
-            disabled
-            value={getSass()}
-          />
+          <p>Get example color variables for styles and Javascript</p>
+          <CodeOutput colors={this.props.colors} />
+        </div>
+        <hr />
+        <div>
+          <p>
+            <a href="/?color=%23ffffff&color=%237d27bc&color=%23F03B97&color=%23EA3A3A&color=%23ffa934&color=%2395ca4e&color=%2304aade">
+              Luminoso Color Palette
+            </a>
+          </p>
         </div>
       </div>
     );

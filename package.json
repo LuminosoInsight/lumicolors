@@ -12,6 +12,7 @@
     "react": "^16.6.3",
     "react-color": "^2.14.1",
     "react-dom": "^16.6.3",
+    "react-modal": "^3.7.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "reactcss": "^1.2.3",
