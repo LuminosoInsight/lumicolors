@@ -57,7 +57,7 @@ class Sidebar extends Component {
           <p>
             <Link
               to={{
-                pathname: "/",
+                pathname: "",
                 search:
                   "?color=%23ffffff&color=%237d27bc&color=%23F03B97&color=%23EA3A3A&color=%23ffa934&color=%2395ca4e&color=%2304aade"
               }}
