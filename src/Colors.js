@@ -50,6 +50,21 @@ const getQueryString = colors => {
   });
 };
 
+const getColorPalettes = props => {
+  let queryColors = getColorParams(props);
+  let colorPalettes = _.keyBy(
+    _.map(queryColors, color => {
+      let swatchInfo = generateColors(color.hex);
+      return {
+        ...color,
+        ...swatchInfo
+      };
+    }),
+    "id"
+  );
+  return colorPalettes;
+};
+
 class Colors extends Component {
   constructor(props) {
     super(props);
@@ -57,19 +72,17 @@ class Colors extends Component {
     this.removeColumn = this.removeColumn.bind(this);
   }
 
+  componentDidMount() {
+    // When this component mounts, get colors from the query params
+    let colorPalettes = getColorPalettes(this.props);
+    if (!_.isEqual(this.props.colors, colorPalettes)) {
+      this.props.replaceColors(colorPalettes);
+    }
+  }
+
   componentDidUpdate() {
     // When this component mounts, get colors from the query params
-    let queryColors = getColorParams(this.props);
-    let colorPalettes = _.keyBy(
-      _.map(queryColors, color => {
-        let swatchInfo = generateColors(color.hex);
-        return {
-          ...color,
-          ...swatchInfo
-        };
-      }),
-      "id"
-    );
+    let colorPalettes = getColorPalettes(this.props);
     if (!_.isEqual(this.props.colors, colorPalettes)) {
       this.props.replaceColors(colorPalettes);
     }
