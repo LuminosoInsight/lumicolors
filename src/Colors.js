@@ -57,7 +57,7 @@ class Colors extends Component {
     this.removeColumn = this.removeColumn.bind(this);
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     // When this component mounts, get colors from the query params
     let queryColors = getColorParams(this.props);
     let colorPalettes = _.keyBy(
@@ -70,7 +70,9 @@ class Colors extends Component {
       }),
       "id"
     );
-    this.props.replaceColors(colorPalettes);
+    if (!_.isEqual(this.props.colors, colorPalettes)) {
+      this.props.replaceColors(colorPalettes);
+    }
   }
 
   addOrUpdateColor(colorObj) {

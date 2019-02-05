@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import { Link } from "react-router-dom";
 
 import ColorPicker from "./ColorPicker";
 import ColorFinder from "./ColorFinder";
@@ -54,9 +55,15 @@ class Sidebar extends Component {
         <hr />
         <div>
           <p>
-            <a href="/?color=%23ffffff&color=%237d27bc&color=%23F03B97&color=%23EA3A3A&color=%23ffa934&color=%2395ca4e&color=%2304aade">
+            <Link
+              to={{
+                pathname: "/",
+                search:
+                  "?color=%23ffffff&color=%237d27bc&color=%23F03B97&color=%23EA3A3A&color=%23ffa934&color=%2395ca4e&color=%2304aade"
+              }}
+            >
               Luminoso Color Palette
-            </a>
+            </Link>
           </p>
         </div>
       </div>
